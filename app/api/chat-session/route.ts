@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
       createdBy: user.primaryEmailAddress.emailAddress,
       createdOn: new Date().toISOString(),
     });
+    console.log("Sending selected doctor:", selectedDoctor);
 
     return NextResponse.json({ sessionId }, { status: 201 });
 
@@ -53,19 +54,19 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("sessionId");
 
-  console.log("✅ GET /chat-session called");
-  console.log("🧠 sessionId:", sessionId);
+  // console.log("✅ GET /chat-session called");
+  // console.log("🧠 sessionId:", sessionId);
 
   const user = await currentUser();
-  console.log("👤 currentUser:", user);
+  // console.log("👤 currentUser:", user);
 
   if (!sessionId) {
-    console.log("⛔ Missing sessionId");
+    // console.log("⛔ Missing sessionId");
     return NextResponse.json({ error: "Session ID is required." }, { status: 400 });
   }
 
   if (!user) {
-    console.log("⛔ No user");
+    // console.log("⛔ No user");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -77,7 +78,7 @@ export async function GET(req: NextRequest) {
       .where(eq(SessionChatTable.sessionId, sessionId))
       .execute();
 
-    console.log("📦 sessionDetails:", sessionDetails);
+    // console.log("📦 sessionDetails:", sessionDetails);
 
     if (sessionDetails.length === 0) {
       return NextResponse.json({ error: "Session not found." }, { status: 404 });
@@ -86,7 +87,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(sessionDetails[0]);
 
   } catch (error: any) {
-    console.error("❌ Error in GET /chat-session:", error);
+    // console.error("❌ Error in GET /chat-session:", error);
     return NextResponse.json({ error: error?.message || "Internal Server Error" }, { status: 500 });
   }
 }

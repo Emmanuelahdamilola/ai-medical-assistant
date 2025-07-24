@@ -11,7 +11,8 @@ export type AiDoctorAgent = {
   specialty: string,
   description: string,
   image: string,
-  agentPrompt: string
+  agentPrompt: string,
+  doctorVoiceId?:string
 }
 
 

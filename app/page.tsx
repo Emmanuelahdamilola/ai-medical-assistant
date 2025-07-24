@@ -1,87 +1,73 @@
-"use client";
+'use client';
 
-
-import { motion } from "motion/react";
-import FeatureBentoGrid from "./_components/FeatureBentoGrid";
-import Navbar from "./_components/Navbar";
-import Link from "next/link";
+import { motion } from 'framer-motion';
+import FeatureBentoGrid from './_components/FeatureBentoGrid';
+import Navbar from './_components/Navbar';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="relative my-10 flex flex-col items-center justify-center">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex flex-col items-center justify-start overflow-hidden">
       <Navbar />
-      <div className="absolute inset-y-0 left-0 h-full w-px bg-neutral-200/80 dark:bg-neutral-800/80">
-        <div className="absolute top-0 h-40 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
+
+      {/* Grid Glow Lines */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-y-0 left-0 w-px bg-neutral-700/50">
+          <div className="absolute top-0 h-40 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
+        </div>
+        <div className="absolute inset-y-0 right-0 w-px bg-neutral-700/50">
+          <div className="absolute top-0 h-40 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-px bg-neutral-700/50">
+          <div className="absolute mx-auto w-40 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+        </div>
       </div>
-      <div className="absolute inset-y-0 right-0 h-full w-px bg-neutral-200/80 dark:bg-neutral-800/80">
-        <div className="absolute h-40 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
-      </div>
-      <div className="absolute inset-x-0 bottom-0 h-px w-full bg-neutral-200/80 dark:bg-neutral-800/80">
-        <div className="absolute mx-auto h-px w-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
-      </div>
-      <div className="px-4 py-10 md:py-20">
-        <h1 className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-slate-700 md:text-4xl lg:text-6xl dark:text-slate-300">
+
+      {/* Hero Section */}
+      <div className="z-10 px-6 pt-24 pb-16 text-center max-w-4xl">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white tracking-tight">
           {"Elevate healthcare delivery using AI-driven voice technology"
             .split(" ")
-            .map((word, index) => (
+            .map((word, i) => (
               <motion.span
-                key={index}
-                initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
-                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.1,
-                  ease: "easeInOut",
-                }}
-                className="mr-2 inline-block"
+                key={i}
+                initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className="inline-block mr-2"
               >
                 {word}
               </motion.span>
             ))}
         </h1>
+
         <motion.p
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          transition={{
-            duration: 0.3,
-            delay: 0.8,
-          }}
-          className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-neutral-600 dark:text-neutral-400"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="mt-6 text-lg text-neutral-400"
         >
           Speak your symptoms, and receive instant recommendations based on global health standards.
         </motion.p>
 
-         <motion.div
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          transition={{
-            duration: 0.3,
-            delay: 1,
-          }}
-          className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="mt-10 flex flex-wrap justify-center gap-4"
         >
-          <Link href={'/sign-in'}>
-          <button className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
-           🎙️ Start Voice Session
-          </button>
+          <Link href="/sign-in">
+            <button className="w-60 transform rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg transition duration-300 hover:-translate-y-1 hover:bg-blue-700">
+              🎙️ Start Voice Session
+            </button>
           </Link>
-          <button className="w-60 transform rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:border-gray-700 dark:bg-black dark:text-white dark:hover:bg-gray-900">
+          <button className="w-60 transform rounded-xl border border-gray-600 bg-transparent px-6 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-gray-700">
             Contact Support
           </button>
         </motion.div>
-         
-        
-        
       </div>
-      <FeatureBentoGrid/>
+
+      <FeatureBentoGrid />
     </div>
   );
 }
