@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import FeatureBentoGrid from './_components/FeatureBentoGrid';
+// import FeatureBentoGrid from './_components/FeatureBentoGrid';
 import Navbar from './_components/Navbar';
 import Link from 'next/link';
 
@@ -67,7 +67,7 @@ export default function Home() {
         </motion.div>
       </div>
 
-      <FeatureBentoGrid />
+      {/* <FeatureBentoGrid /> */}
     </div>
   );
 }
