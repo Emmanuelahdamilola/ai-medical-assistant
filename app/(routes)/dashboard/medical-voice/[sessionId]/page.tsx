@@ -78,7 +78,7 @@ export default function MedicalVoice() {
       firstMessage:
         "Hello, I’m your AI Medical Assistant. I’m here to listen, support, and guide you with your health concerns. What would you like to talk about today?",
       transcriber: {
-        provider: 'deepgram',
+        provider: 'assembly-ai',
         language: 'en'
 
       },
@@ -97,10 +97,6 @@ export default function MedicalVoice() {
         ]
       }
     }
-    console.log("Prompt:", sessionParams?.selectedDoctor?.agentPrompt);
-    console.log("Voice ID:", sessionParams?.selectedDoctor?.doctorVoiceId);
-
-
 
     // @ts-ignore
     vapi.start(VapiVoiceConfig);

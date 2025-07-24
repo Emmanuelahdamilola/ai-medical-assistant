@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useRef } from 'react';
 import {
   Dialog,
@@ -17,6 +18,7 @@ import axios from 'axios';
 import { AiDoctorAgent } from './AiDoctorAgentCard';
 import { RecommendedDoctorCard } from './RecommendedDoctorCard';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AddNewSessionDialog() {
   const [note, setNote] = useState<string>("");
@@ -31,7 +33,6 @@ export default function AddNewSessionDialog() {
       setLoading(true);
       const result = await axios.post('/api/suggested-ai-doctors', { notes: note });
       setAiDoctors(result.data);
-      console.log("AI Doctors Response:", result.data);
     } catch (error) {
       console.error("Error fetching AI doctors:", error);
     } finally {
@@ -51,8 +52,6 @@ export default function AddNewSessionDialog() {
         notes: note,
         selectedDoctor: selectedDoctor
       });
-      console.log("Consultation started:", response.data);
-      setNote("");
 
       const sessionId = response.data?.sessionId;
       if (!sessionId) {
@@ -60,10 +59,7 @@ export default function AddNewSessionDialog() {
         return;
       }
 
-      // Close the dialog
       closeRef.current?.click();
-
-      // Navigate to the session page
       router.push(`/dashboard/medical-voice/${sessionId}`);
     } catch (error) {
       console.error("Error starting consultation:", error);
@@ -75,52 +71,89 @@ export default function AddNewSessionDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Start Consultation <IconArrowRight /></Button>
+        <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:opacity-90 shadow-md">
+          Start Consultation <IconArrowRight className="ml-2" />
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+
+      <DialogContent className="bg-zinc-900 text-white border border-zinc-700 rounded-xl shadow-2xl max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Add New Session</DialogTitle>
+          <DialogTitle className="text-xl font-semibold tracking-wide">
+            Add New Session
+          </DialogTitle>
           <DialogDescription asChild>
-            {!aiDoctors ? (
-              <div>
-                <p>Please provide the necessary details or symptoms to start a new session.</p>
-                <Textarea
-                  placeholder="Describe your symptoms..."
-                  className="mt-2 h-[200px]"
-                  onChange={(e) => setNote(e.target.value)}
-                />
-              </div>
-            ) : (
-              <div className='grid grid-cols-2 gap-3'>
-                {aiDoctors.map((doctor, index) => (
-                  <RecommendedDoctorCard
-                    key={index}
-                    doctor={doctor}
-                    setSelectedDoctor={setSelectedDoctor}
-                    selectedDoctor={selectedDoctor}
+            <div className="mt-4">
+              {!aiDoctors ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <p className="text-sm text-zinc-400 mb-3">
+                    Tell us about your symptoms to match you with a virtual doctor.
+                  </p>
+                  <Textarea
+                    placeholder="Describe your symptoms..."
+                    className="h-[160px] bg-zinc-800 text-white placeholder-zinc-400 border border-zinc-700 focus:ring-purple-600"
+                    onChange={(e) => setNote(e.target.value)}
                   />
-                ))}
-              </div>
-            )}
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  <AnimatePresence>
+                    {aiDoctors.map((doctor, index) => (
+                      <motion.div
+                        key={index}
+                        layout
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <RecommendedDoctorCard
+                          doctor={doctor}
+                          setSelectedDoctor={setSelectedDoctor}
+                          selectedDoctor={selectedDoctor}
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+            </div>
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className='flex justify-end mt-4'>
-          {/* Hidden button to manually close dialog */}
+
+        <DialogFooter className="mt-6 flex justify-end space-x-3">
           <DialogClose asChild>
             <button ref={closeRef} className="hidden" />
           </DialogClose>
 
           <DialogClose asChild>
-            <Button variant="outline" className="mr-2">Cancel</Button>
+            <Button variant="ghost" className="border border-zinc-700 text-zinc-300 hover:text-white">
+              Cancel
+            </Button>
           </DialogClose>
 
           {!aiDoctors ? (
-            <Button onClick={handleNext} disabled={!note || loading}>
-              {loading ? 'Processing...' : <>Next <IconArrowRight /></>}
+            <Button
+              onClick={handleNext}
+              disabled={!note || loading}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              {loading ? 'Processing...' : <>Next <IconArrowRight className="ml-2" /></>}
             </Button>
           ) : (
-            <Button onClick={handleStartConsultation} disabled={loading}>
-              {loading ? 'Processing...' : <>Start Consultation <IconArrowRight /></>}
+            <Button
+              onClick={handleStartConsultation}
+              disabled={loading}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              {loading ? 'Processing...' : <>Start Consultation <IconArrowRight className="ml-2" /></>}
             </Button>
           )}
         </DialogFooter>
